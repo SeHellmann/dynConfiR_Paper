@@ -1,0 +1,105 @@
+INFO [2023-10-28 01:12:02.531305] on process 765515 fittingDDMConf for participant 1 and model DDMConf: 756 ...parameter sets to check
+INFO [2023-10-28 01:12:02.532726] on process 765515 fittingDDMConf for participant 1 and model DDMConf: data was compressed due to rounding rts by a factor of  1 .
+INFO [2023-10-28 01:12:02.533837] on process 765515 fittingDDMConf for participant 1 and model DDMConf: fitting data got  953  rows
+INFO [2023-10-28 01:12:02.534906] on process 765515 fittingDDMConf for participant 1 and model DDMConf: Searching initial values ...
+SUCCESS [2023-10-28 01:12:04.687156] on process 765515 fittingDDMConf for participant 1 and model DDMConf: Initial grid search took... 0.04  mins
+INFO [2023-10-28 01:12:04.68852] on process 765515 fittingDDMConf for participant 1 and model DDMConf: Start fitting ... 
+SUCCESS [2023-10-28 01:12:05.158773] on process 765515 fittingDDMConf for participant 1 and model DDMConf: Done fitting and autosaved results
+INFO [2023-10-28 01:12:05.739815] on process 765515 fittingDDMConf for participant 2 and model DDMConf: 756 ...parameter sets to check
+INFO [2023-10-28 01:12:05.74179] on process 765515 fittingDDMConf for participant 2 and model DDMConf: data was compressed due to rounding rts by a factor of  1 .
+INFO [2023-10-28 01:12:05.743145] on process 765515 fittingDDMConf for participant 2 and model DDMConf: fitting data got  955  rows
+INFO [2023-10-28 01:12:05.744241] on process 765515 fittingDDMConf for participant 2 and model DDMConf: Searching initial values ...
+SUCCESS [2023-10-28 01:12:08.621978] on process 765515 fittingDDMConf for participant 2 and model DDMConf: Initial grid search took... 0.05  mins
+INFO [2023-10-28 01:12:08.623155] on process 765515 fittingDDMConf for participant 2 and model DDMConf: Start fitting ... 
+SUCCESS [2023-10-28 01:12:09.125536] on process 765515 fittingDDMConf for participant 2 and model DDMConf: Done fitting and autosaved results
+INFO [2023-10-28 01:20:16.560234] on process 765581 fittingDDMConf for participant 3 and model DDMConf: 756 ...parameter sets to check
+INFO [2023-10-28 01:20:16.562918] on process 765581 fittingDDMConf for participant 3 and model DDMConf: data was compressed due to rounding rts by a factor of  1 .
+INFO [2023-10-28 01:20:16.565351] on process 765581 fittingDDMConf for participant 3 and model DDMConf: fitting data got  952  rows
+INFO [2023-10-28 01:20:16.567888] on process 765581 fittingDDMConf for participant 3 and model DDMConf: Searching initial values ...
+SUCCESS [2023-10-28 01:20:21.148331] on process 765581 fittingDDMConf for participant 3 and model DDMConf: Initial grid search took... 0.08  mins
+INFO [2023-10-28 01:20:21.15071] on process 765581 fittingDDMConf for participant 3 and model DDMConf: Start fitting ... 
+SUCCESS [2023-10-28 01:20:26.696877] on process 765581 fittingDDMConf for participant 3 and model DDMConf: Done fitting and autosaved results
+INFO [2023-10-28 01:28:13.807573] on process 765515 fittingDDMConf for participant 4 and model DDMConf: 756 ...parameter sets to check
+INFO [2023-10-28 01:28:13.809872] on process 765515 fittingDDMConf for participant 4 and model DDMConf: data was compressed due to rounding rts by a factor of  1 .
+INFO [2023-10-28 01:28:13.812127] on process 765515 fittingDDMConf for participant 4 and model DDMConf: fitting data got  951  rows
+INFO [2023-10-28 01:28:13.8144] on process 765515 fittingDDMConf for participant 4 and model DDMConf: Searching initial values ...
+SUCCESS [2023-10-28 01:28:18.426322] on process 765515 fittingDDMConf for participant 4 and model DDMConf: Initial grid search took... 0.08  mins
+INFO [2023-10-28 01:28:18.428916] on process 765515 fittingDDMConf for participant 4 and model DDMConf: Start fitting ... 
+SUCCESS [2023-10-28 01:29:00.030285] on process 765515 fittingDDMConf for participant 4 and model DDMConf: Done fitting and autosaved results
+INFO [2023-10-28 01:34:02.403185] on process 765581 fittingDDMConf for participant 5 and model DDMConf: 756 ...parameter sets to check
+INFO [2023-10-28 01:34:02.405925] on process 765581 fittingDDMConf for participant 5 and model DDMConf: data was compressed due to rounding rts by a factor of  1 .
+INFO [2023-10-28 01:34:02.408605] on process 765581 fittingDDMConf for participant 5 and model DDMConf: fitting data got  951  rows
+INFO [2023-10-28 01:34:02.411331] on process 765581 fittingDDMConf for participant 5 and model DDMConf: Searching initial values ...
+SUCCESS [2023-10-28 01:34:06.935323] on process 765581 fittingDDMConf for participant 5 and model DDMConf: Initial grid search took... 0.08  mins
+INFO [2023-10-28 01:34:06.937776] on process 765581 fittingDDMConf for participant 5 and model DDMConf: Start fitting ... 
+SUCCESS [2023-10-28 01:34:07.848036] on process 765581 fittingDDMConf for participant 5 and model DDMConf: Done fitting and autosaved results
+INFO [2023-10-28 01:43:08.579129] on process 765482 fittingDDMConf for participant 6 and model DDMConf: 756 ...parameter sets to check
+INFO [2023-10-28 01:43:08.580532] on process 765482 fittingDDMConf for participant 6 and model DDMConf: data was compressed due to rounding rts by a factor of  1 .
+INFO [2023-10-28 01:43:08.581841] on process 765482 fittingDDMConf for participant 6 and model DDMConf: fitting data got  924  rows
+INFO [2023-10-28 01:43:08.583121] on process 765482 fittingDDMConf for participant 6 and model DDMConf: Searching initial values ...
+SUCCESS [2023-10-28 01:43:12.41585] on process 765482 fittingDDMConf for participant 6 and model DDMConf: Initial grid search took... 0.06  mins
+INFO [2023-10-28 01:43:12.418184] on process 765482 fittingDDMConf for participant 6 and model DDMConf: Start fitting ... 
+SUCCESS [2023-10-28 01:43:13.247882] on process 765482 fittingDDMConf for participant 6 and model DDMConf: Done fitting and autosaved results
+INFO [2023-10-28 01:52:22.622566] on process 765548 fittingDDMConf for participant 7 and model DDMConf: 756 ...parameter sets to check
+INFO [2023-10-28 01:52:22.624774] on process 765548 fittingDDMConf for participant 7 and model DDMConf: data was compressed due to rounding rts by a factor of  1 .
+INFO [2023-10-28 01:52:22.626901] on process 765548 fittingDDMConf for participant 7 and model DDMConf: fitting data got  957  rows
+INFO [2023-10-28 01:52:22.628993] on process 765548 fittingDDMConf for participant 7 and model DDMConf: Searching initial values ...
+SUCCESS [2023-10-28 01:52:27.061833] on process 765548 fittingDDMConf for participant 7 and model DDMConf: Initial grid search took... 0.07  mins
+INFO [2023-10-28 01:52:27.064052] on process 765548 fittingDDMConf for participant 7 and model DDMConf: Start fitting ... 
+SUCCESS [2023-10-28 01:52:32.492987] on process 765548 fittingDDMConf for participant 7 and model DDMConf: Done fitting and autosaved results
+INFO [2023-10-28 02:00:22.036068] on process 765482 fittingDDMConf for participant 8 and model DDMConf: 756 ...parameter sets to check
+INFO [2023-10-28 02:00:22.038241] on process 765482 fittingDDMConf for participant 8 and model DDMConf: data was compressed due to rounding rts by a factor of  1 .
+INFO [2023-10-28 02:00:22.040321] on process 765482 fittingDDMConf for participant 8 and model DDMConf: fitting data got  955  rows
+INFO [2023-10-28 02:00:22.042397] on process 765482 fittingDDMConf for participant 8 and model DDMConf: Searching initial values ...
+SUCCESS [2023-10-28 02:00:26.397995] on process 765482 fittingDDMConf for participant 8 and model DDMConf: Initial grid search took... 0.07  mins
+INFO [2023-10-28 02:00:26.40157] on process 765482 fittingDDMConf for participant 8 and model DDMConf: Start fitting ... 
+SUCCESS [2023-10-28 02:00:27.265458] on process 765482 fittingDDMConf for participant 8 and model DDMConf: Done fitting and autosaved results
+INFO [2023-10-28 02:05:46.281583] on process 765482 fittingDDMConf for participant 10 and model DDMConf: 756 ...parameter sets to check
+INFO [2023-10-28 02:05:46.284251] on process 765482 fittingDDMConf for participant 10 and model DDMConf: data was compressed due to rounding rts by a factor of  1 .
+INFO [2023-10-28 02:05:46.286581] on process 765482 fittingDDMConf for participant 10 and model DDMConf: fitting data got  948  rows
+INFO [2023-10-28 02:05:46.288827] on process 765482 fittingDDMConf for participant 10 and model DDMConf: Searching initial values ...
+SUCCESS [2023-10-28 02:05:50.732353] on process 765482 fittingDDMConf for participant 10 and model DDMConf: Initial grid search took... 0.07  mins
+INFO [2023-10-28 02:05:50.734549] on process 765482 fittingDDMConf for participant 10 and model DDMConf: Start fitting ... 
+SUCCESS [2023-10-28 02:05:51.608111] on process 765482 fittingDDMConf for participant 10 and model DDMConf: Done fitting and autosaved results
+INFO [2023-10-28 02:10:15.467612] on process 765581 fittingDDMConf for participant 11 and model DDMConf: 756 ...parameter sets to check
+INFO [2023-10-28 02:10:15.470222] on process 765581 fittingDDMConf for participant 11 and model DDMConf: data was compressed due to rounding rts by a factor of  1 .
+INFO [2023-10-28 02:10:15.472629] on process 765581 fittingDDMConf for participant 11 and model DDMConf: fitting data got  930  rows
+INFO [2023-10-28 02:10:15.474991] on process 765581 fittingDDMConf for participant 11 and model DDMConf: Searching initial values ...
+SUCCESS [2023-10-28 02:10:20.115448] on process 765581 fittingDDMConf for participant 11 and model DDMConf: Initial grid search took... 0.08  mins
+INFO [2023-10-28 02:10:20.118042] on process 765581 fittingDDMConf for participant 11 and model DDMConf: Start fitting ... 
+SUCCESS [2023-10-28 02:10:26.018947] on process 765581 fittingDDMConf for participant 11 and model DDMConf: Done fitting and autosaved results
+INFO [2023-10-28 02:15:30.376721] on process 765548 fittingDDMConf for participant 12 and model DDMConf: 756 ...parameter sets to check
+INFO [2023-10-28 02:15:30.378905] on process 765548 fittingDDMConf for participant 12 and model DDMConf: data was compressed due to rounding rts by a factor of  1 .
+INFO [2023-10-28 02:15:30.380986] on process 765548 fittingDDMConf for participant 12 and model DDMConf: fitting data got  944  rows
+INFO [2023-10-28 02:15:30.383047] on process 765548 fittingDDMConf for participant 12 and model DDMConf: Searching initial values ...
+SUCCESS [2023-10-28 02:15:34.403303] on process 765548 fittingDDMConf for participant 12 and model DDMConf: Initial grid search took... 0.07  mins
+INFO [2023-10-28 02:15:34.405424] on process 765548 fittingDDMConf for participant 12 and model DDMConf: Start fitting ... 
+SUCCESS [2023-10-28 02:15:40.735239] on process 765548 fittingDDMConf for participant 12 and model DDMConf: Done fitting and autosaved results
+INFO [2023-10-28 02:21:17.791409] on process 765614 fittingDDMConf for participant 13 and model DDMConf: 756 ...parameter sets to check
+INFO [2023-10-28 02:21:17.79381] on process 765614 fittingDDMConf for participant 13 and model DDMConf: data was compressed due to rounding rts by a factor of  1 .
+INFO [2023-10-28 02:21:17.796237] on process 765614 fittingDDMConf for participant 13 and model DDMConf: fitting data got  950  rows
+INFO [2023-10-28 02:21:17.798685] on process 765614 fittingDDMConf for participant 13 and model DDMConf: Searching initial values ...
+SUCCESS [2023-10-28 02:21:22.486726] on process 765614 fittingDDMConf for participant 13 and model DDMConf: Initial grid search took... 0.08  mins
+INFO [2023-10-28 02:21:22.488857] on process 765614 fittingDDMConf for participant 13 and model DDMConf: Start fitting ... 
+SUCCESS [2023-10-28 02:21:23.399731] on process 765614 fittingDDMConf for participant 13 and model DDMConf: Done fitting and autosaved results
+INFO [2023-10-28 02:25:52.280052] on process 765614 fittingDDMConf for participant 14 and model DDMConf: 756 ...parameter sets to check
+INFO [2023-10-28 02:25:52.282244] on process 765614 fittingDDMConf for participant 14 and model DDMConf: data was compressed due to rounding rts by a factor of  1 .
+INFO [2023-10-28 02:25:52.284337] on process 765614 fittingDDMConf for participant 14 and model DDMConf: fitting data got  954  rows
+INFO [2023-10-28 02:25:52.286437] on process 765614 fittingDDMConf for participant 14 and model DDMConf: Searching initial values ...
+SUCCESS [2023-10-28 02:25:56.666962] on process 765614 fittingDDMConf for participant 14 and model DDMConf: Initial grid search took... 0.07  mins
+INFO [2023-10-28 02:25:56.669165] on process 765614 fittingDDMConf for participant 14 and model DDMConf: Start fitting ... 
+SUCCESS [2023-10-28 02:26:07.237817] on process 765614 fittingDDMConf for participant 14 and model DDMConf: Done fitting and autosaved results
+INFO [2023-10-28 02:31:43.484638] on process 765482 fittingDDMConf for participant 15 and model DDMConf: 756 ...parameter sets to check
+INFO [2023-10-28 02:31:43.48713] on process 765482 fittingDDMConf for participant 15 and model DDMConf: data was compressed due to rounding rts by a factor of  1 .
+INFO [2023-10-28 02:31:43.489645] on process 765482 fittingDDMConf for participant 15 and model DDMConf: fitting data got  953  rows
+INFO [2023-10-28 02:31:43.492129] on process 765482 fittingDDMConf for participant 15 and model DDMConf: Searching initial values ...
+SUCCESS [2023-10-28 02:31:48.219569] on process 765482 fittingDDMConf for participant 15 and model DDMConf: Initial grid search took... 0.08  mins
+INFO [2023-10-28 02:31:48.221682] on process 765482 fittingDDMConf for participant 15 and model DDMConf: Start fitting ... 
+SUCCESS [2023-10-28 02:31:52.934644] on process 765482 fittingDDMConf for participant 15 and model DDMConf: Done fitting and autosaved results
+INFO [2023-10-28 02:38:42.467313] on process 765614 fittingDDMConf for participant 16 and model DDMConf: 756 ...parameter sets to check
+INFO [2023-10-28 02:38:42.46973] on process 765614 fittingDDMConf for participant 16 and model DDMConf: data was compressed due to rounding rts by a factor of  1 .
+INFO [2023-10-28 02:38:42.472159] on process 765614 fittingDDMConf for participant 16 and model DDMConf: fitting data got  928  rows
+INFO [2023-10-28 02:38:42.474499] on process 765614 fittingDDMConf for participant 16 and model DDMConf: Searching initial values ...
+SUCCESS [2023-10-28 02:38:47.084033] on process 765614 fittingDDMConf for participant 16 and model DDMConf: Initial grid search took... 0.08  mins
+INFO [2023-10-28 02:38:47.08635] on process 765614 fittingDDMConf for participant 16 and model DDMConf: Start fitting ... 
+SUCCESS [2023-10-28 02:38:58.024548] on process 765614 fittingDDMConf for participant 16 and model DDMConf: Done fitting and autosaved results

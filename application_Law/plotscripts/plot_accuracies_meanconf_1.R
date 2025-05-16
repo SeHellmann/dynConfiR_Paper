@@ -122,7 +122,7 @@ ggsave("figures/accuracymeanRating_1.tiff",
        width = 17.62, height=12, units="cm",dpi=600)
 ggsave("figures/accuracymeanRating_1.eps",
        width = 15, height=7, units="cm",dpi=1200, device = cairo_ps)
-ggsave("../../Draft/figures/example/accuracymeanRating_1.eps",
-       width = 15, height=7, units="cm",dpi=1200, device = cairo_ps)
+# ggsave("../../Draft/figures/example/accuracymeanRating_1.eps",
+#        width = 15, height=7, units="cm",dpi=1200, device = cairo_ps)
 
 

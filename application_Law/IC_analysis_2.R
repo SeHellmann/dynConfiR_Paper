@@ -2,6 +2,19 @@ require(ggpubr)
 require(scales)
 windowsFonts(Times=windowsFont("Times"))
 dir.create("figures", showWarnings = FALSE)
+custom_theme <- theme(plot.margin = margin(0.1, 0, 0, 0.1, "cm"),
+        text = element_text(size=12, family="Times"),
+        panel.grid.minor = element_blank(),  # switch off minor gridlines
+        panel.grid.major.x = element_blank(),
+        axis.text = element_text(size=12, family="Times", color="black"),
+        axis.title.y = element_text( angle=90),
+        strip.text = element_blank(), strip.background = element_blank(),
+        legend.key.height = unit(0.7, "cm"),
+        legend.key.width = unit(0.7, "cm"))
+# Colorblind-friendly color palette:
+model_levels <-  c(          "PCRMt", "IRMt",              "dynaViTE", "dynWEV", "2DSD")
+model_colors <- c(          "#E69F00","#009E73",            "#D55E00", "#0072B2", "#CC79A7")
+cbbPalette <- c("#F0E442", "#E69F00", "#009E73", "#56B4E9", "#D55E00" ,"#0072B2",  "#CC79A7", "#DFAAA7")
 
 temp_allfits <- allfits %>% 
   mutate(model= str_replace(model, " ", "\n")) %>% 
@@ -9,59 +22,19 @@ temp_allfits <- allfits %>%
   pivot_longer(cols=c("BIC", "AIC", "AICc"), names_to="criterion") %>%
   mutate(model = as.factor(model), criterion=as.factor(criterion))
 
-plotICs <- temp_allfits %>%
-  group_by(model, criterion) %>%
-  summarise(Mean=mean(value), SE=sd(value)/sqrt(n()), .groups = "drop")
+
 plotICs <- temp_allfits %>%
   group_by(criterion) %>%
   reframe(Rmisc::summarySEwithin(pick(everything()), measurevar="value", 
                                  idvar="participant", withinvars = "model")) %>%
-  right_join(plotICs)
-
+  rename(Mean=value)
 plotICs <- plotICs %>% 
   mutate(model= factor(model, 
                        levels=plotICs[plotICs$criterion=="BIC",][["model"]][order(plotICs[plotICs$criterion=="BIC",][["Mean"]])], ordered = TRUE))
 
-ggplot(temp_allfits, aes(x=model, y=value))+
-  geom_violin()+geom_line(aes(group=participant))+
-  facet_wrap(.~criterion)
-
-temp_allfits2 <- temp_allfits %>% group_by(criterion, participant) %>%
-  mutate(value = value - mean(value), 
-         class="Mean-centered") %>%
-  rbind(mutate(temp_allfits, class="Absolute values"))  %>%
-  ungroup()
-ggplot(subset(temp_allfits2,criterion =="BIC"), aes(x=model, y=value))+
-  geom_violin()+geom_line(aes(group=participant))+
-  facet_grid(class~., scales = "free_y")
-
-ggplot(subset(temp_allfits2, criterion =="BIC"), aes(x=model, y=value))+
-  geom_violin()+geom_line(aes(group=participant))+
-  facet_grid(class~., scales = "free_y")
-distinct(select(temp_allfits, model, participant, criterion))
-temp2 <- temp_allfits %>% 
-  filter(!grepl("dynaViTE", model) ) %>%
-  left_join(select(filter(temp_allfits, grepl("dynaViTE", model)&grepl("fixed", model)), 
-                   participant, criterion, value_dynaViTE=value)) %>%
-  mutate(value = value-value_dynaViTE)
-
-ggplot(subset(temp2,criterion=="BIC"), aes(x=model, y=value))+
-  #geom_violin()+
-  geom_line(aes(group=participant))+geom_point()+
-  ylab("Difference in IC between model and dynaViTE (fixed)")
-ggplot(subset(temp2,criterion=="BIC"), aes(x=model, y=sign(value)*log(abs(value), base=3)))+
-  #geom_violin()+
-  geom_line(aes(group=participant))+geom_point()+
-  scale_y_continuous(breaks=-5:5)+
-  ylab("Difference in IC between model and dynaViTE (fixed)")
-
 ### 
 model_levels_2 <- levels(plotICs$model)
 model_levels_2
-# Colorblind-friendly color palette:
-model_levels <-  c(          "PCRMt", "IRMt",              "dynaViTE", "dynWEV", "2DSD")
-model_colors <- c(          "#E69F00","#009E73",            "#D55E00", "#0072B2", "#CC79A7")
-cbbPalette <- c("#F0E442", "#E69F00", "#009E73", "#56B4E9", "#D55E00" ,"#0072B2",  "#CC79A7","#000000")
 
 # To use for fills, add
 p_BICavg <- ggplot(subset(plotICs,criterion=="BIC"), 
@@ -87,67 +60,79 @@ p_BICavg <- ggplot(subset(plotICs,criterion=="BIC"),
         axis.title.y = element_text( angle=90))
 p_BICavg
 
-# ggsave("figures/ICs_2.eps", device=cairo_ps, width=8, height=3.5, dpi=600)
-# ggsave("../../Draft/figures/example/ICs_2.eps", device=cairo_ps, 
-#        width=8, height=3.5, dpi=600)
-# 
-# ggsave("figures/ICs_2.tiff", width=8, height=3.5, dpi=600)
 
 
 
-BICweights <- allfits %>%
+### Group-level BMS
+groupBMS <- group_BMS_fits(allfits)
+groupBMS_df <- groupBMS$model_weights %>% 
+  as.data.frame() %>%
+  rownames_to_column("model") %>% 
   mutate(model= str_replace(model, " ", "\n")) %>% 
-  group_by(participant) %>%
-  mutate(BICdiff = BIC-min(BIC),
-         expBICdiff = exp(-0.5*(BIC-min(BIC))),
-         wBIC = expBICdiff / sum(expBICdiff)) %>%
-  #  wBIC = round((expBICdiff+1e-300) / sum(expBICdiff+1e-300),20)) %>%
-  ungroup() 
-## Rearrange plot order for participants
+  arrange(desc(pep)) %>% 
+  mutate(pltorder = 1:n(), 
+         model = factor(pltorder, labels=model))
+# For dirichlet-rv we would scale Gamma-RV to a max of 1,
+# but we are interested in the index of the max only, so this it not
+# necessary
+alpha <- groupBMS_df$alpha
+n <- 20000
+sim_dir <- expand.grid(model=unique(groupBMS_df$model), N=1:n)
+sim_dir <- sim_dir %>% left_join(groupBMS_df[,c("model", "alpha")]) %>%
+  mutate(GammaRV = rgamma(1:n(), shape=alpha)) %>%
+  group_by(N) %>% mutate(DirProb = GammaRV/sum(GammaRV)) %>% ungroup() %>%
+  mutate(model=factor(model, levels=model_levels_2))
+
+pep_plt <- ggplot(sim_dir)+
+  geom_violin(aes(x=model, y=DirProb, fill=model))+
+  xlab("Model")+ylab("Probability")+
+  geom_errorbar(data=groupBMS_df, aes(x=model, ymin=pep, ymax=pep, linetype="Protected exceedance probability"), 
+                width=0.35, linewidth=1.2)+#, shape="-", size="\U2014")+
+  geom_errorbar(data=groupBMS_df, aes(x=model, ymin=fx_prob, ymax=fx_prob, linetype="Model probability (fixed effect model)"), 
+                width=0.35, linewidth=1.2)+#, shape="-", size="\U2014")+
+  scale_linetype_manual(name="", 
+                        breaks=c("Protected exceedance probability", "Model probability (fixed effect model)"),
+                        values=c(1,3))+
+  scale_fill_manual(name="Model",
+                    breaks = levels(plotICs$model)[c(5,1,7, 3, 8, 2, 4, 6)],
+                    values=cbbPalette[c(5,1,7, 3, 8, 2, 4, 6)], guide="none")+
+  theme_bw()+custom_theme +
+  theme(legend.position = "bottom",
+        axis.text.x = element_text(angle=45, hjust=1),
+        legend.key.width = unit(1, "cm"), legend.key.height = unit(0.1, "cm"))
+pep_plt
+
+BICweights <- allfits %>% mutate(model= str_replace(model, " ", "\n")) %>%  subject_modelweights()
 BICweights <- BICweights %>% 
-  ungroup() %>% 
-  select(model,participant, wBIC) %>% 
-  pivot_wider(names_from = model, values_from = wBIC) %>%
   arrange(round(desc(`dynaViTE`)),desc(`dynaViTE\n(fixed)`), desc(`2DSD`), desc(IRMt), desc(PCRMt)) %>%
+  #arrange(desc(`dynaViTE`), desc(`2DSD`), desc(IRMt), desc(PCRMt)) %>%
   mutate(plotorder = 1:n()) %>% 
-  pivot_longer(2:9, names_to="model", values_to="wBIC")
-# BICweights <- BICweights %>% arrange(model, participant)
-# BICweights <- BICweights %>%
-#   group_by(model) %>% mutate(plotorder = order(BICweights[BICweights$model=="dynaViTE\n(fixed)",]$wBIC,
-#                                                decreasing = TRUE))
-BICweights <- mutate(BICweights, model=factor(model, levels=model_levels_2))
+  pivot_longer(cols=-c(participant, plotorder), names_to="model", values_to="wBIC") %>%
+  mutate(model=factor(model, levels=levels(plotICs$model)))
+
+
 p_BIC_part<- ggplot(BICweights, aes(x=plotorder, y=wBIC, fill=model))+
-  geom_bar(stat = "identity")+
+  geom_bar(stat = "identity", color="black", linewidth=0.6, width=1)+
   scale_fill_manual(name="Model",
                     breaks = levels(plotICs$model)[c(5,1,7, 3, 8, 2, 4, 6)],
                     values=cbbPalette[c(5,1,7, 3, 8, 2, 4, 6)])+
   ylab("BIC weight")+
-  scale_x_continuous(name="Participant (reordered)", breaks=c(1, 5, 10, 15))+
-  theme_minimal()+
-  theme(plot.margin = margin(0.1, 0, 0, 0.1, "cm"),
-        text = element_text(size=12, family="Times"),
-        panel.grid.minor = element_blank(),  # switch off minor gridlines
-        panel.grid.major.x = element_blank(),
-        axis.text = element_text(size=12, family="Times", color="black"),
-        axis.title.y = element_text( angle=90),
-        strip.text = element_blank(), strip.background = element_blank(),
-        legend.key.height = unit(0.7, "cm"),
-        legend.key.width = unit(0.7, "cm"))
+  scale_x_continuous(name="Participant (reordered)", breaks=c(1, 5, 10, 15), expand = c(0.02, 0.02))+
+  theme_minimal()+custom_theme+
+  theme(legend.position = "top")
 p_BIC_part
-# ggsave("figures/BICweights_2.eps", width=15, height=6, 
-#        units = "cm", device = cairo_ps)
-# ggsave("../../Draft/figures/example/BICweights_2.eps", width=15, height=6, 
-#        units = "cm", device = cairo_ps)
-# ggsave("figures/BICweights_2.tiff", width=8.2, height=4, 
-#        units = "cm")
 
 
-ggarrange(p_BICavg, p_BIC_part, nrow=2, heights = c(0.6, 0.4))
-ggsave("figures/BIC_2.eps", width=15, height=13, 
+p_BICavg2 <- p_BICavg + theme(axis.title.x = element_blank(), 
+                              axis.text.x = element_blank())
+p_BICavg2
+ggarrange(p_BIC_part, p_BICavg2, pep_plt,nrow=3, heights = c(0.32, 0.22, 0.46), align = "v")
+ggsave("figures/BIC_2.eps", width=15, height=19, 
        units = "cm", device = cairo_ps)
-ggsave("../../Draft/figures/example/BIC_2.eps", width=15, height=13, 
-       units = "cm", device = cairo_ps)
-ggsave("figures/BIC_2.tiff", width=8.2, height=4, 
+# ggsave("../../Draft/figures/example/BIC_2.eps", width=15, height=19,
+#        units = "cm", device = cairo_ps)
+ggsave("figures/BIC_2.tiff", width=15, height=19, 
        units = "cm")
+
 
 

@@ -3,7 +3,7 @@
 #####               approximated density in Race Models             #######
 ###########################################################################
 
-# Sebastian Hellmann, 03.06.2024
+# Sebastian Hellmann, 04.04.2025
 
 ###   Preamble and imports    ####
 
@@ -55,7 +55,7 @@ if (!file.exists("saved_RMs2.RDATA")) {
   
   par_samples_df <- do.call(rbind, par_samples)
   res <- rbind(expand.grid(listind = which(grepl(par_samples_df$model, pattern="RM")),
-                           precision = c(seq(4, 8, by=0.5),9)))
+                           precision = c(seq(2, 7, by=0.5),9)))
   
   compute_prec <- function(X) {
     t01 <- Sys.time()
@@ -78,7 +78,7 @@ if (!file.exists("saved_RMs2.RDATA")) {
   res_RMs <- res[res[,1] %in% which(par_samples_df$model!="dynaViTE"),]
   res_RMs$model <- par_samples_df$model[res_RMs[,1]]
   res_RMs <- split(res_RMs, seq(nrow(res_RMs)))
-  Ncores <- 4
+  Ncores <- 15
   cl <- makeCluster(type = "SOCK", Ncores)
   clusterExport(cl, c("compute_prec", "par_samples", "simulated_data"), envir = environment())
   clusterEvalQ(cl, source("helper_compute_probs.R"))
@@ -104,7 +104,7 @@ time_used
 ## Get vector of computation times
 times <- do.call(rbind, prob_res)[,2]
 times <- as.numeric(times)
-
+sum(times) / 60 / 60
 
 #prob_res1 <- matrix(NA, nrow=length(prob_res), ncol=600)
 #times <- matrix(NA, nrow=length(res_dynaViTE), ncol=3)
@@ -137,12 +137,14 @@ custom_theme <-       theme_bw() +
   theme(plot.margin = margin(0, 0, 0, 0, "cm"),
         text = element_text(size=9, family="Times"),
         axis.text = element_text(size=9, family="Times", color="black"))
-p1 <- ggplot(filter(res2, issubseq),
+#res2 <- subset(res2, precision %in% c(2,3,4,5,6,7,9))
+p1 <- ggplot(filter(res2, issubseq & meanabserror > 0),
              aes(x=as.factor(precision), y=meanabserror))+
   geom_boxplot()+
   scale_y_continuous(name="Mean absolute difference between\nprecision and (precision+0.5)",
-                     trans = "log", breaks=10^(-c(8, 6, 4, 2, 0)), #c(0.1, 1, 10, 100, 1000),
-                     labels = parse(text=paste("10^-", c(8, 6, 4, 2, 0), sep="")))+
+                     trans = "log", breaks=10^(-c(7, 5, 3, 1)), #c(0.1, 1, 10, 100, 1000),
+                     labels = parse(text=paste("10^-", c(7, 5, 3, 1), sep="")),
+                     expand = expansion(mult=0.05, add=c(0, 1)))+
   scale_x_discrete(name="", limits=factor(unique(res2$precision)))+guides(x="none")+
   facet_grid(cols=vars(model))+
   custom_theme
@@ -151,8 +153,8 @@ p2 <- ggplot(filter(res2, precision_ref==max(res2$precision) & precision != max(
              aes(x=as.factor(precision), y=meanabserror))+
   geom_boxplot()+
   scale_y_continuous(name="Mean absolute difference between\nprecision and (precision=9)",
-                     trans = "log", breaks=10^(-c(8, 6, 4, 2, 0)), #c(0.1, 1, 10, 100, 1000),
-                     labels = parse(text=paste("10^-", c(8, 6, 4, 2, 0), sep="")))+
+                     trans = "log", breaks=10^(-c(7, 5, 3, 1)), #c(0.1, 1, 10, 100, 1000),
+                     labels = parse(text=paste("10^-", c(7, 5, 3, 1), sep="")))+
   scale_x_discrete(name="", limits=factor(unique(res2$precision)))+guides(x="none")+
   # stat_summary(fun = mean, geom = "errorbar", aes(ymax = ..y.., ymin = ..y..),
   #              width = .75, linewidth=1, linetype="dashed")+
@@ -175,24 +177,47 @@ p3 <- ggplot(subset(res2, !is.na(min)), aes(x=as.factor(precision), y=min*60))+
         strip.text = element_blank())+
   theme(axis.title.x = element_text(margin=margin(t=6, b=0, r=0, l=0, unit = "pt")))
 p3
-text_height = 0.946
+text_height = 0.95
+rect_height = 0.944
 ggpubr::ggarrange(p1, p2, p3, nrow=3, heights = c(0.32, 0.32, 0.36)) +
-  annotate("rect", xmin=0.289-0.023, xmax=0.289+0.0225, ymin=0.01, ymax=0.94, 
+  annotate("rect", 
+           xmin= (5.5+(2.7-2)*11/3)/50, 
+           xmax= (5.5+(3.22-2)*11/3)/50, 
+           ymin=0.01, ymax=rect_height, 
            fill=NA, color="darkred", linewidth=1)+
-  annotate("rect", xmin=0.75-0.022, xmax=0.75+0.023, ymin=0.01, ymax=0.94, 
+  annotate("rect", 
+           xmin= (5.5+(5.75-2)*11/3)/50, 
+           xmax= (5.5+(6.25-2)*11/3)/50, 
+           ymin=0.01, ymax=rect_height, 
            fill=NA, color="darkred", linewidth=1)+
-  annotate("text", x=0.289, y=text_height, vjust=0, hjust=0.5,
-           color="darkred", label="Default",
+  annotate("rect", 
+           xmin= (28.7+(2.7-2)*11/3)/50, 
+           xmax= (28.7+(3.2-2)*11/3)/50, 
+           ymin=0.01, ymax=rect_height, 
+           fill=NA, color="darkred", linewidth=1)+
+  annotate("rect", 
+           xmin= (28.7+(5.75-2)*11/3)/50, 
+           xmax= (28.7+(6.24-2)*11/3)/50, 
+           ymin=0.01, ymax=rect_height, 
+           fill=NA, color="darkred", linewidth=1)+
+  annotate("text", x=(28.7+(6-2)*11/3)/50, y=text_height, vjust=0, hjust=0.5,
+           color="darkred", label="Default for density",
            family="Times")+
-  annotate("text", x=0.75, y=text_height, vjust=0, hjust=0.5,
-           color="darkred", label="Default",
+  annotate("text", x=(28.7+(3-2)*11/3)/50, y=text_height, vjust=0, hjust=0.5,
+           color="darkred", label="Default for fitting",
+           family="Times")+
+  annotate("text", x=(5.5+(3-2)*11/3)/50, y=text_height, vjust=0, hjust=0.5,
+           color="darkred", label="Default for fitting",
+           family="Times")+
+  annotate("text", x=(5.5+(6-2)*11/3)/50, y=text_height, vjust=0, hjust=0.5,
+           color="darkred", label="Default for density",
            family="Times")
 
 # ggsave("figures/precision_results_RM.jpg", height=17, width=17, units="cm",
 #        dpi = 600)
 # ggsave("figures/precision_results_RM.eps", height=17, width=17, units="cm",
 #        dpi = 600, dev=cairo_ps)
-# ggsave("../../Draft/figures/precision/precision_results_RM.eps", height=17, 
+# ggsave("../../Draft/figures/precision/precision_results_RM.eps", height=17,
 #        width=17, units="cm",
 #        dpi = 600, dev=cairo_ps)
 save(prob_res, res_RMs, res2, times, file="saved_RM_final.RDATA")

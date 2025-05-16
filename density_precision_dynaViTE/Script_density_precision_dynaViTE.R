@@ -4,11 +4,11 @@
 ###########################################################################
 
 #### NOTE: In this script we load previous results by default, if they are
-####          available. You can rerun the analysis, but for us, it took
-####          3.5 hours on 21 cores to calculate the results. 
+####          available. You can rerun the analysis, but it may take about
+####          3.3 hours without parallelization. 
 ####      
 
-# Sebastian Hellmann, 03.06.2024
+# Sebastian Hellmann, 04.04.2025
 
 ###   Preamble and imports    ####
 
@@ -33,7 +33,7 @@ windowsFonts(Times=windowsFont("Times New Roman"))
 #=====================
 
 
-if (!file.exists("saved_dynaViTE2.RDATA")) {
+if (!file.exists("saved_dynaViTE.RDATA")) {
   ## Prior distributions
   source("parameter_prior.R")
   ## Source function to compute probabilities over simulated data
@@ -58,30 +58,38 @@ if (!file.exists("saved_dynaViTE2.RDATA")) {
   }
   
   par_samples_df <- do.call(rbind, par_samples)
-  res <- rbind(expand.grid(listind = which(par_samples_df$model=="dynaViTE"),
-                           precision = c(0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 5)),
-               expand.grid(listind = which(grepl(par_samples_df$model, pattern="RM")),
-                           precision = c(1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-12)))
+  res <- expand.grid(listind = which(par_samples_df$model=="dynaViTE"),
+                           precision = c(seq(2, 8, by=0.5), 9))
   
+  dir.create("autosave", showWarnings = FALSE)
   compute_prec <- function(X) {
-    t01 <- Sys.time()
-    model <- par_samples[[X[[1]]]]$model
-    simu <- subset(simulated_data[[X[[1]]]], response !=0)
-    print(paste0("Start:", paste(X, collapse=", ")))
-    if (model=="dynaViTE") {
-      return(list(probs=compute_probsdynaViTE(simu, par_samples[[X[[1]]]],
-                                              precision=X[[2]]), time=difftime(Sys.time(), t01, units = "min")))
+    save_file <- paste0("autosave/listind_", X[[1]], "_precision_", X[[2]], ".RData")
+    if (file.exists(save_file)) {
+      load(save_file)
     } else {
-      return(list(probs=compute_probsRM(simu, par_samples[[X[[1]]]], model,
-                                        precision=X[[2]]), time=difftime(Sys.time(), t01, units = "min")))
+      t01 <- Sys.time()
+      model <- par_samples[[X[[1]]]]$model
+      simu <- subset(simulated_data[[X[[1]]]], response !=0)
+      print(paste0("Start:", paste(X, collapse=", ")))
+      if (model=="dynaViTE") {
+        probs=compute_probsdynaViTE(simu, par_samples[[X[[1]]]],
+                                    precision=X[[2]])
+      } else {
+        probs=compute_probsRM(simu, par_samples[[X[[1]]]], model,
+                              precision=X[[2]])
+      }
+      time=difftime(Sys.time(), t01, units = "min")
+      precision = X[[2]]
+      save(time, probs, simu, model, precision, file=save_file)
     }
+    return(list(probs=probs, time=time))
   }
   parallel::detectCores()
   
   res_dynaViTE <- res[res[,1] %in% which(par_samples_df$model=="dynaViTE"),]
   res_dynaViTE <- split(res_dynaViTE, seq(nrow(res_dynaViTE)))
-  Ncores <- 23
-  cl <- makeCluster(type = "SOCK", Ncores)
+  Ncores <- 8
+  cl <- makeCluster(Ncores) #type = "SOCK", 
   clusterExport(cl, c("compute_prec", "par_samples", "simulated_data"), envir = environment())
   clusterEvalQ(cl, source("helper_compute_probs.R"))
   clusterEvalQ(cl, library(dynConfiR))
@@ -92,20 +100,19 @@ if (!file.exists("saved_dynaViTE2.RDATA")) {
   
   #prob_res <- clusterApplyLB(cl, res, fun = compute_prec)
   t00 <- Sys.time()
-  prob_res <- parLapplyLB(cl, res_dynaViTE, compute_prec)
+  #prob_res <- parLapplyLB(cl, res_dynaViTE, compute_prec)
+  prob_res <- snow::parLapply(cl, res_dynaViTE, compute_prec)
   stopCluster(cl)
   time_used <- difftime(Sys.time(), t00, units = "hour")
-  save(prob_res, res_dynaViTE, time_used, file="saved_dynaViTE2.RDATA")
+  save(prob_res, res_dynaViTE, time_used, file="saved_dynaViTE.RDATA")
 } else {
-  load("saved_dynaViTE2.RDATA")
+  load("saved_dynaViTE.RDATA")
 }
-time_used
-
 
 ## Get vector of computation times
 times <- do.call(rbind, prob_res)[,2]
 times <- as.numeric(times)
-
+sum(times) / 60 / 60
 
 #prob_res1 <- matrix(NA, nrow=length(prob_res), ncol=600)
 #times <- matrix(NA, nrow=length(res_dynaViTE), ncol=3)
@@ -136,9 +143,9 @@ for ( i in 1:nrow(res2)) res2[i, "issubseq"] <-
 ### the precision argument in the dynConfiR package was adapted 14/03/24 
 ##  based on these results
 res2$precision2 <- res2$precision
-res2$precision <- res2$precision2+3.5
+res2$precision <- res2$precision2
 res2$precision_ref2 <-  res2$precision_ref
-res2$precision_ref <-  res2$precision_ref2+3.5
+res2$precision_ref <-  res2$precision_ref2
 
 
 
@@ -177,16 +184,30 @@ p3 <- ggplot(subset(res2, !is.na(min)), aes(x=as.factor(precision), y=min*60))+
   theme(axis.title.x = element_text(margin=margin(t=10, b=0, r=0, l=0, unit = "pt")))
 p3
 ggarrange(p1, p2, p3, nrow=3, heights = c(0.32, 0.32, 0.36)) +
-  annotate("rect", xmin=0.493, xmax=0.59, ymin=0.025, ymax=0.955, 
+  annotate("rect", 
+           xmin=(5+(5.75-2)*47/9)/40.5, 
+           xmax=(5+(6.25-2)*47/9)/40.5, 
+           ymin=0.025, ymax=0.962, 
            fill=NA, color="darkred", linewidth=1)+
-  annotate("text", x=mean(c(0.493, 0.59)), y=0.988, vjust=1, hjust=0.5,
-                          color="darkred", label="Default",
+  annotate("text", x=(5+(6-2)*47/9)/40.5, 
+           y=0.99, vjust=1, hjust=0.5,
+           color="darkred", label="Default for density",
+           family="Times")+
+  annotate("rect", 
+           xmin=(5+(2.75-2)*47/9)/40.5, 
+           xmax=(5+(3.25-2)*47/9)/40.5, 
+           ymin=0.025, ymax=0.962, 
+           fill=NA, color="darkred", linewidth=1)+
+  annotate("text", x=(5+(3-2)*47/9)/40.5, 
+           y=0.99, vjust=1, hjust=0.5,
+           color="darkred", label="Default for fitting",
            family="Times")
 # ggsave("figures/precision_results_dynaViTE.jpg", height=17, width=17, units="cm",
 #        dpi = 600)
 # ## Only for Manuscript
 # ggsave("../../Draft/figures/precision/precision_results_dynaViTE.eps", height=17, width=17, units="cm",
 #        dpi = 600, dev=cairo_ps)
+# 
 save(prob_res,  res_dynaViTE, res2, times, file="saved_dynaViTE_final.RDATA")
 
 

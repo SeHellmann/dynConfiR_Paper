@@ -2,7 +2,7 @@
 ##### Example of a modeling analysis using the dynConfiR package    #######
 ###########################################################################
 
-# Sebastian Hellmann, 15.05.2024
+# Sebastian Hellmann, 04.04.2025
 
 # 1) Read in data and remove possible outliers
 # 2) Fit several dynamical confidence models
@@ -84,13 +84,13 @@ Data <- filter(Data, !participant%in% BadParts[BadParts$goodPart==-1,"participan
 
 ## 2. Fit the four models to the three experimental data   ----
 
-### a) Start a new model fit (may take some days...)
-### Rather skip to b)...
-
+# ### a) Start a new model fit (may take some days...)
+# ### Rather skip to b)...
+# 
 # parallel::detectCores()
 # parfits <- fitRTConfModels(Data, models=c("dynaViTE", "dynWEV",
 #                                           "2DSD", "PCRMt", "IRMt"), nRatings=4,
-#                 restr_tau = "simult_conf", logging = TRUE,
+#                 restr_tau = "simult_conf", logging = TRUE, 
 #                 opts=list(nAttempts=4, nRestarts=4), parallel="both", n.cores = c(5, 4),
 #                 condition = "coh_level", rating="confidence")
 # save(file="parfits.RData", parfits)
@@ -112,9 +112,10 @@ source("IC_analysis_1.R")
 #                                          scaled=TRUE, DistConf = prediction_ConfDist,
 #                                          parallel=TRUE)
 # 
-# save(file="fitsandpredictions_1.RData",
-#      Data, parfits, prediction_ConfDist, prediction_RTConfDist)
-load("fitsandpredictions_1.RData")
+# save(file="fitsandpredictions.RData",
+#       Data, parfits, prediction_ConfDist, prediction_RTConfDist)
+load("fitsandpredictions.RData")
+
 options(digits=2)
 print(head(prediction_ConfDist), row.names=FALSE)
 # Sanity check: Sum of probabiltities should be 1 per stimulus & condition
@@ -129,7 +130,7 @@ print(head(prediction_RTConfDist), row.names=FALSE)
 # 5) Visualization of observations and predictions in different aggregations
 Data <- Data %>% mutate(condition = coh_level, 
                         rating = confidence, 
-                        correct= as.numeric(stimulus==response))
+                        correct= as.numeric(stimulus==response)) %>% ungroup()
 
 #### Discrete rating distribution 
 source("plotscripts/plot_rating_dist_1.R")
@@ -164,7 +165,6 @@ source("plotscripts/plot_RTQuants_cond_1.R")
 
 
 
-
 #####################################################################
 #####################################################################
 ##########   Exploration with fixed parameters       ################
@@ -179,8 +179,8 @@ source("plotscripts/plot_RTQuants_cond_1.R")
 #                                           nRatings=4,
 #                            restr_tau = "simult_conf", logging = TRUE,
 #                            fixed = list(sz=0, st0=0, svis=1),
-#                            opts=list(nAttempts=4, nRestarts=4), parallel="both", n.cores = c(5, 4),
-#                            condition = "coh_level", rating="confidence")
+#                            opts=list(nAttempts=4, nRestarts=4), parallel="both",
+#                            n.cores = c(5, 4))
 # 
 # setwd("..")
 # parfits_fixed[, setdiff(names(parfits), names(parfits_fixed))] <- NA
@@ -212,11 +212,12 @@ source("IC_analysis_2.R")
 # prediction_RTConfDist_fixed <- predictRTModels(parfits_fixed, simult_conf=TRUE, maxrt=6,
 #                                          scaled=TRUE, DistConf = prediction_ConfDist_fixed,
 #                                          parallel=TRUE)
-# save(file="fitsandpredictions_allfits_2.RData",
+# save(file="fitsandpredictions_allfits.RData",
 #      Data, allfits, parfits, parfits_fixed,
 #      prediction_ConfDist, prediction_RTConfDist,
 #      prediction_ConfDist_fixed, prediction_RTConfDist_fixed)
-load("fitsandpredictions_allfits_2.RData")
+load("fitsandpredictions_allfits.RData")
+
 
 head(prediction_ConfDist_fixed)
 # Sanity check: Sum of probabiltities should be 1 per stimulus & condition

@@ -73,8 +73,8 @@ ggsave(paste0("figures/RespDist_2.tiff"), plot = p_ratingdist,
      width=17.3, height=18, units="cm",dpi=1200)
 ggsave("figures/RespDist_2.eps",
      width=17.3, height=18, units="cm",dpi=1200, device = cairo_ps)
-ggsave("../../Draft/figures/example/RespDist_2.eps",
-       width=19, height=18, units="cm",dpi=1200, device = cairo_ps)
+# ggsave("../../Draft/figures/example/RespDist_2.eps",
+#        width=19, height=18, units="cm",dpi=1200, device = cairo_ps)
 
 
 

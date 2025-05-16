@@ -391,7 +391,7 @@ noise parameters, respectively</li>
 </ul></li>
 <li><p>The folders <strong>density_precision_dynaViTE</strong> and
 <strong>density_precision_RM</strong> contain the code for the Precision
-analyis section in the manuscript, each containing:</p>
+analysis section in the manuscript, each containing:</p>
 <ul>
 <li>a R-script <strong>Script_density_precision…</strong> containing the
 main code for the computations and the visualization of the
@@ -403,8 +403,9 @@ densities for different precisions</li>
 <li>several <strong>.RData</strong>-files containing the intermediate
 and final results of the analysis</li>
 </ul></li>
-<li><p>The folder <strong>recovery_analysis</strong> with code used for
-the Recovery analysis section of the manuscript. It contains:</p>
+<li><p>The folder <strong>parameter_recovery</strong> with code used for
+the Parameter recovery analysis section of the manuscript. It
+contains:</p>
 <ul>
 <li>The script <strong>Script_par_rec.R</strong>, which contains the
 main recovery analysis, from simulating artificial data and fitting the
@@ -435,17 +436,65 @@ different models (contained in the same file)</li>
 used as true parameters for the recovery) and the folder
 <strong>fit_results</strong> containing subfolders for each model, each
 containing the fitting results for each iteration of the recovery
-simulation</li>
-<li>the script <strong>gather_plot_results.R</strong>, which gathers all
-the results within the folder <strong>saved_data/fit_results</strong>,
-and visualizes the results of the parameter recovery study</li>
+simulation (another subfolder <strong>simulated_data</strong> is not
+included but will be generated when running the main script for the
+parameter recovery)</li>
+<li>the file <strong>saved_results.RData</strong> contains all collected
+results from the recovery analysis</li>
+<li>the script <strong>gather_plot_results.R</strong>, which visualizes
+the results of the parameter recovery study</li>
 </ul></li>
-<li><p>dynConfiR-source package file (.tar.gz). This is an intermediate
-0.0.4-version of the package with likelihood and fitting functions, used
-for the computations. A more recent version is available on <a href="https://github.com/SeHellmann/dynConfiR">GitHub</a> and on <a href="https://cran.r-project.org/web/packages/dynConfiR/index.html">CRAN</a>.
+<li><p>The folder <strong>model_recovery</strong> with code used for the
+Model recovery analysis section of the manuscript. It contains:</p>
+<ul>
+<li>The script <strong>Script_model_rec.R</strong>, which contains the
+main recovery analysis, from simulating artificial data and fitting the
+models to the simulated data, it sources several functions from</li>
+<li>the folder <strong>helper_fct.R</strong>, which contains R-files
+each defining functions (pretty much the same as for parameter recovery;
+only the fitting function deviates slightly):
+<ul>
+<li>to collect and combine previous parameter fits from empirical
+studies (<strong>read_and_collect_previous_fits.R</strong>, the result
+is saved in <strong>collected_fits_models.RData</strong>),</li>
+<li>to sample random proportions of confidence samples from a Dirichlet
+distribution (<strong>fun_sample_rating_props.R</strong>, the
+information for this is saved in
+<strong>collected_rating_proportions_and_alpha.RData</strong>)</li>
+<li>to simulate artificial data using the sampled parameter sets and
+confidence proportions
+(<strong>helper_simulate_artificialdata_fivesteps.R</strong>)</li>
+<li>and fitting a specific model to given data
+(<strong>fitting_function_parrec_fivesteps.R</strong>)</li>
+</ul></li>
+<li>the folder <strong>prevfits</strong> including
+<strong>.RData</strong>-files that contain estimated parameters from
+model fitting to different empirical data sets (different files) for
+different models (contained in the same file)</li>
+<li>the folder <strong>saved_details</strong>, containing
+<strong>all_par_samples_list.RData</strong> (with all parameter sets
+used as true parameters for the recovery) and the folder
+<strong>fit_results</strong> containing subfolders for each generative
+and fitted model combination, each containing the fitting results for
+each iteration of the recovery simulation (another subfolder
+<strong>simulated_data</strong> is not included but will be generated
+when running the main script for the parameter recovery)
+<ul>
+<li>the file <strong>list_w_all_recoveries.RData</strong> in the
+subfolder <strong>fit_results</strong> contains all collected results
+from the model recovery for each simulation</li>
+</ul></li>
+<li>the files <strong>group_BMS_results.RData</strong> and
+<strong>group_BMS_results_AIC.RData</strong> contain the results from
+the group-level comparison in the model recovery</li>
+</ul></li>
+<li><p>dynConfiR-source package file (.tar.gz). This the 1.0.0-version
+of the package which was used for the publication, with likelihood and
+fitting functions, used for the computations. A more recent version may
+be available on <a href="https://github.com/SeHellmann/dynConfiR">GitHub</a> and on <a href="https://cran.r-project.org/web/packages/dynConfiR/index.html">CRAN</a>.
 The newer versions on GitHub and CRAN may produce different results. The
 source package may be installed via</p>
-<pre class="r"><code>install.packages(&quot;dynWEV_0.0.4.tar.gz&quot;, type = &quot;source&quot;, dependencies=TRUE,repos=&quot;http://a.cran.mirror&quot;) </code></pre>
+<pre class="r"><code>install.packages(&quot;dynWEV_1.0.0.tar.gz&quot;, type = &quot;source&quot;, dependencies=TRUE,repos=&quot;http://a.cran.mirror&quot;) </code></pre>
 <p>The more recent versions may be installed using
 <code>install.packages(&quot;dynConfiR&quot;)</code></p></li>
 </ul>

@@ -23,19 +23,6 @@ Preds_RTQuants_corr_rating <- Preds_RTdens_corr_cond_rating %>%
             by = c("model","correct", "rating")) %>%
   mutate(model=factor(model, levels=model_levels, ordered = TRUE))
 
-# Preds_RTQuants_corr_cond <-   Preds_RTdens_corr_cond_rating %>%
-#   group_by(model, experiment, rt, correct, condition) %>%
-#   summarise(dens = sum(dens), .groups = "keep") %>%
-#   group_by(model, experiment, correct, condition) %>% 
-#   do(PDFtoQuantiles(.)) %>%  
-#   left_join(summarise(group_by(Preds_RatingDist_corr_cond, 
-#                                model, experiment, condition, correct), 
-#                       p_correct=sum(p), .groups="drop"),
-#             by = c("model", "experiment", "correct", "condition"))
-
-
-
-
 
 
 ## Figure 7: RTQuantiles accross correct X rating          ----
@@ -92,14 +79,9 @@ ggplot()+
 
 ggsave("figures/RTQuantsConf_1.eps",
        width=17.62, height=15, dpi=1200, units="cm", device=cairo_ps)
-ggsave("../../Draft/figures/example/RTQuantsConf_1.eps",
-       width=17.62, height=15, dpi=1200, units="cm", device=cairo_ps)
+# ggsave("../../Draft/figures/example/RTQuantsConf_1.eps",
+#        width=17.62, height=15, dpi=1200, units="cm", device=cairo_ps)
 
 ggsave("figures/RTQuantsConf_1.tiff",
        width = 15, height=13, units="cm",dpi=600)   # Filling a whole power point slide
-# ggsave("../../Draft/figures/results/RTQuantsConf1.eps",
-#        width=17.62, height=22, dpi=1200, units="cm", device=cairo_ps)
-# ggsave("../../Draft/figures/results/RTQuantsConf1.eps",
-#        width=18.288, height=15.24, dpi=1200, units="cm", device=cairo_ps)
 
-             

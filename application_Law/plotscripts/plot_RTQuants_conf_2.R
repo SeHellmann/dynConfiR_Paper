@@ -90,14 +90,11 @@ ggplot()+
 
 ggsave("figures/RTQuantsConf_2.eps",
        width=17.62, height=15, dpi=1200, units="cm", device=cairo_ps)
-ggsave("../../Draft/figures/example/RTQuantsConf_2.eps",
-       width=17.62, height=15, dpi=1200, units="cm", device=cairo_ps)
+# ggsave("../../Draft/figures/example/RTQuantsConf_2.eps",
+#        width=17.62, height=15, dpi=1200, units="cm", device=cairo_ps)
 
 ggsave("figures/RTQuantsConf_2.tiff",
        width = 15, height=13, units="cm",dpi=600)   # Filling a whole power point slide
-# ggsave("../../Draft/figures/results/RTQuantsConf1.eps",
-#        width=17.62, height=22, dpi=1200, units="cm", device=cairo_ps)
-# ggsave("../../Draft/figures/results/RTQuantsConf1.eps",
-#        width=18.288, height=15.24, dpi=1200, units="cm", device=cairo_ps)
+
 
              

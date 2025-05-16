@@ -72,7 +72,7 @@ ggsave("figures/meanRating_response_1.tiff",
        width = 17.62, height=15, units="cm",dpi=600)
 ggsave("figures/meanRating_response_1.eps",
        width = 12, height=15, units="cm",dpi=1200, device = cairo_ps)
-ggsave("../../Draft/figures/example/meanRating_response_1.eps",
-       width = 12, height=15, units="cm",dpi=1200, device = cairo_ps)
+# ggsave("../../Draft/figures/example/meanRating_response_1.eps",
+#        width = 12, height=15, units="cm",dpi=1200, device = cairo_ps)
 
 
